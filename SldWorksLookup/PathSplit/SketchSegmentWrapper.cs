@@ -221,7 +221,8 @@ namespace SldWorksLookup.PathSplit
         private static void GetSpAndEp(ISketchSegment seg, out Point3D sp, out Point3D ep)
         {
             sp = default; ep = default;
-            switch ((swSketchSegments_e)seg.GetType())
+            swSketchSegments_e seTtype = (swSketchSegments_e)seg.GetType();
+            switch (seTtype)
             {
                 case swSketchSegments_e.swSketchLINE:
                     var line = seg as ISketchLine;

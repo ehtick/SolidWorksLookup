@@ -29,10 +29,12 @@ namespace SldWorksLookup
                 Path.GetDirectoryName(typeof(LogExtension).Assembly.Location),
                 "exceptionless.txt");
 
+                string[] data = new string[] { "", "" };
                 if (!File.Exists(configFile))
-                    return;
+                {
+                    data = File.ReadAllLines(configFile);
+                }
 
-                var data = File.ReadAllLines(configFile);
 
                 if (data.Length < 2)
                     return;

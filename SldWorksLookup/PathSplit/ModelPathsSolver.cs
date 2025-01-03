@@ -52,6 +52,10 @@ namespace SldWorksLookup.PathSplit
             foreach (var skeWrapper in sketchWappers)
             {
                 var chain = skeWrapper.GetChains().FirstOrDefault();
+                if (chain == null)
+                {
+                    continue;
+                }
                 var chainPoints = chain.Split(0.0002);
                 points.AddRange(chainPoints);
             }

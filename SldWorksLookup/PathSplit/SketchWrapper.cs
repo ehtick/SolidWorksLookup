@@ -50,7 +50,7 @@ namespace SldWorksLookup.PathSplit
                     if(!startConnected)
                         startConnected = ses[i].IsStartConnected(ses[j]);
                     if (!endConnected)
-                        endConnected = ses[j].IsEndConnected(ses[j]);
+                        endConnected = ses[i].IsEndConnected(ses[j]);
 
                     if (startConnected && endConnected)
                         break;
@@ -110,6 +110,7 @@ namespace SldWorksLookup.PathSplit
                     chainSes.Add(newSes[k]);
                     newSes.RemoveAt(k--);
                     next = chainSes.Last();
+                    break;
                 }
                 else if (current.EndPoint.ValueEqual(newSes[k].EndPoint))
                 {
@@ -117,13 +118,9 @@ namespace SldWorksLookup.PathSplit
                     chainSes.Add(newSes[k]);
                     newSes.RemoveAt(k--);
                     next = chainSes.Last();
-                }
-                if (next != null)
-                {
                     break;
                 }
             }
-
             return next;
         }
         #endregion

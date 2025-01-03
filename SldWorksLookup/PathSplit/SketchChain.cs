@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using SolidWorks.Interop.sldworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -15,6 +16,7 @@ namespace SldWorksLookup.PathSplit
     {
         #region Fields
         private RelayCommand _exportCommand;
+        private RelayCommand _exportToCSVCommand;
         private readonly ISketch _sketch;
         private readonly IComponent2 _comp;
         #endregion
@@ -47,6 +49,9 @@ namespace SldWorksLookup.PathSplit
         /// 导出命令
         /// </summary>
         public RelayCommand ExportCommand { get => _exportCommand ?? (_exportCommand = new RelayCommand(ExportClick)); }
+
+        public RelayCommand ExportToCSVCommand { get => _exportToCSVCommand = new RelayCommand(ExportToCSVClick); }
+
         #endregion
 
         #region Public Methods
@@ -140,6 +145,41 @@ namespace SldWorksLookup.PathSplit
             };
 
             window.ShowDialog();
+        }
+
+        private void ExportToCSVClick()
+        {
+            try
+            {
+                //获取点
+                List<Point3D> points = Split(StepLength);
+
+                // 选择保存位置
+                var dialog = new Microsoft.Win32.SaveFileDialog()
+                {
+                    Filter = "CSV文件|*.csv",
+                    DefaultExt = ".csv",
+                    FileName = "Path.csv"
+                };
+
+                if (dialog.ShowDialog() != true)
+                    return;
+
+                //保存
+                using (var writer = new System.IO.StreamWriter(dialog.FileName))
+                {
+                    writer.WriteLine("X,Y,Z");
+                    foreach (var point in points)
+                    {
+                        writer.WriteLine($"{point.X},{point.Y},{point.Z}");
+                    }
+                    writer.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         #endregion
     }
